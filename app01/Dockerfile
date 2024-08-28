@@ -22,7 +22,6 @@ RUN apt-get update && apt-get install -y \
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 # Configurar el directorio de trabajo
 WORKDIR /var/www
 
@@ -32,9 +31,10 @@ COPY . /var/www
 # Ejecutar composer install
 RUN composer install --no-dev --optimize-autoloader
 
-# Permitir que el contenedor exponga el puerto 9000
-EXPOSE 9000
+# Exponer el puerto 80 para servir la aplicación Laravel
+EXPOSE 80
 
 # Comando por defecto para ejecutar cuando el contenedor se inicie
-CMD ["php-fpm"]
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=80"]
+
 
